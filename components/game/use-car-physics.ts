@@ -125,7 +125,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
 
         // Reset combo and score function with high score handling
         const resetComboAndScore = () => {
-          if (combo > 1) {
+          if (combo > 1 || score > 0) {  // Modified to always reset if score > 0
             // Add final score popup before resetting
             if (score > 0) {
               scorePopups.push({
@@ -359,6 +359,14 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           height: CAR_HEIGHT,
         }
 
+        // Helper function to check for collision
+        const checkCollision = (objHitbox: { x: number, y: number, width: number, height: number }) => {
+          return carHitbox.x + carHitbox.width > objHitbox.x &&
+            carHitbox.x < objHitbox.x + objHitbox.width &&
+            carHitbox.y < objHitbox.y + objHitbox.height &&
+            carHitbox.y + carHitbox.height > objHitbox.y;
+        };
+
         // Check for rock collisions
         rocks.forEach(rock => {
           const rockHitbox = {
@@ -369,11 +377,12 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           }
 
           // Check if car is colliding with the rock
-          const isColliding =
-            carHitbox.x + carHitbox.width > rockHitbox.x &&
-            carHitbox.x < rockHitbox.x + rockHitbox.width &&
-            carHitbox.y < rockHitbox.y + rockHitbox.height &&
-            carHitbox.y + carHitbox.height > rockHitbox.y
+          const isColliding = checkCollision(rockHitbox);
+          
+          // Debug collision
+          if (isColliding) {
+            console.log('Collision detected with rock at', rock.x, rock.y);
+          }
 
           // If colliding and not already flipping, start a flip or crash
           if (isColliding && !isFlipping && !isCrashed) {
@@ -429,6 +438,10 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           if (isOnTop) {
             isOnButton = true
             buttonPlatformY = objHitbox.y
+            // Reset score when landing on a platform
+            if (prevCar.wasInAir) {
+              resetComboAndScore()
+            }
             // Adjust car position to be on top of the button
             newY = objHitbox.y - carHitbox.height
             newVelocityY = 0
@@ -441,11 +454,41 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
 
         // Hover handling is done in a separate effect and state update
 
+        // Check for welcome sign collision
+        const WELCOME_SIGN_X = -350 - 200;
+        const WELCOME_SIGN_Y = GROUND_LEVEL - 350;
+        const WELCOME_SIGN_WIDTH = 500;
+        const WELCOME_SIGN_HEIGHT = 150;
+        
+        // Check if car is on top of the welcome sign
+        const isOnWelcomeSign = 
+          carHitbox.x + carHitbox.width > WELCOME_SIGN_X &&
+          carHitbox.x < WELCOME_SIGN_X + WELCOME_SIGN_WIDTH &&
+          carHitbox.y + carHitbox.height >= WELCOME_SIGN_Y - 5 &&
+          carHitbox.y + carHitbox.height <= WELCOME_SIGN_Y + 5 &&
+          newVelocityY >= 0;
+          
+        if (isOnWelcomeSign && !isOnButton) {
+          newY = WELCOME_SIGN_Y - CAR_HEIGHT;
+          newVelocityY = 0;
+          isJumping = false;
+          // Reset score when landing on welcome sign
+          if (wasInAir) {
+            resetComboAndScore();
+          }
+          wasInAir = false;
+          isOnButton = true; // Prevent ground collision check
+        }
+
         // Check ground collision only if not on a button
         if (!isOnButton && newY > GROUND_LEVEL - CAR_HEIGHT) {
           newY = GROUND_LEVEL - CAR_HEIGHT
           newVelocityY = 0
           isJumping = false
+          // Reset score when landing on the ground
+          if (wasInAir) {
+            resetComboAndScore()
+          }
           wasInAir = false
         } else if (newVelocityY > 0) {
           // Car is falling
