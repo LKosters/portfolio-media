@@ -108,7 +108,7 @@ const ROCK_WIDTH = 30
 const ROCK_HEIGHT = 20
 const FLIP_SPEED = 15 // Degrees per frame
 const SPEEDOMETER_RADIUS = 80
-const MAX_SPEED_MPH = 120 // Maximum speed on the speedometer
+const MAX_SPEED_MPH = 300 // Maximum speed on the speedometer (changed from 120 to 300)
 const SPEED_MULTIPLIER = 15 // Adjusted to match new physics
 const DASH_FORCE = 30 // Force applied when dashing
 const DASH_DURATION = 10 // Duration of dash in frames
@@ -275,9 +275,9 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
           "bg1.jpeg",
         )
 
-        setDebugInfo(
-          `Road image loaded: ${roadImageRef.current?.complete}, width: ${roadImageRef.current?.width}, height: ${roadImageRef.current?.height}`,
-        )
+        // setDebugInfo(
+        //   `Road image loaded: ${roadImageRef.current?.complete}, width: ${roadImageRef.current?.width}, height: ${roadImageRef.current?.height}`,
+        // )
         setImagesLoaded(true)
       } catch (error) {
         console.error("Error loading images:", error)
@@ -453,26 +453,26 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
       if (welcomeX > -500 && welcomeX < canvas.width) {
         // Draw welcome sign
         ctx.fillStyle = "#000000" // Black shadow
-        ctx.fillRect(welcomeX - 4, GROUND_LEVEL - 350 - cameraRef.current.y, 504, 154)
+        ctx.fillRect(welcomeX - 204, GROUND_LEVEL - 350 - cameraRef.current.y, 504, 154)
 
         ctx.fillStyle = "#FFD700" // Gold background
-        ctx.fillRect(welcomeX, GROUND_LEVEL - 354 - cameraRef.current.y, 500, 150)
+        ctx.fillRect(welcomeX - 200, GROUND_LEVEL - 354 - cameraRef.current.y, 500, 150)
 
         ctx.strokeStyle = "#000000"
         ctx.lineWidth = 4
-        ctx.strokeRect(welcomeX, GROUND_LEVEL - 354 - cameraRef.current.y, 500, 150)
+        ctx.strokeRect(welcomeX - 200, GROUND_LEVEL - 354 - cameraRef.current.y, 500, 150)
 
         // Draw welcome text
         ctx.fillStyle = "#000000"
         ctx.font = "bold 24px monospace"
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
-        ctx.fillText("WELCOME TO MY PORTFOLIO", welcomeX + 250, GROUND_LEVEL - 314 - cameraRef.current.y)
+        ctx.fillText("WELCOME TO MY PORTFOLIO", welcomeX + 50, GROUND_LEVEL - 314 - cameraRef.current.y)
 
         // Draw instructions
         ctx.font = "16px monospace"
-        ctx.fillText("Drive with arrow keys or WASD", welcomeX + 250, GROUND_LEVEL - 274 - cameraRef.current.y)
-        ctx.fillText("Touch buttons to see projects", welcomeX + 250, GROUND_LEVEL - 244 - cameraRef.current.y)
+        ctx.fillText("Use arrow keys or WASD to move, W to jump", welcomeX + 50, GROUND_LEVEL - 274 - cameraRef.current.y)
+        ctx.fillText("Crouch on a project button to view its content", welcomeX + 50, GROUND_LEVEL - 244 - cameraRef.current.y)
       }
 
       // Draw portfolio items (hovering buttons)
@@ -641,7 +641,7 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
       ctx.textBaseline = "middle"
       
       // Draw speed numbers
-      for (let i = 0; i <= MAX_SPEED_MPH; i += 20) {
+      for (let i = 0; i <= MAX_SPEED_MPH; i += 50) {
         const angle = (i / MAX_SPEED_MPH) * Math.PI + Math.PI
         const markerX = speedometerX + Math.cos(angle) * (SPEEDOMETER_RADIUS - 25)
         const markerY = speedometerY + Math.sin(angle) * (SPEEDOMETER_RADIUS - 25)

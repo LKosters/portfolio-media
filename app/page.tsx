@@ -93,8 +93,8 @@ export default function Home() {
     <main className="relative w-full h-screen overflow-hidden bg-black">
       <GameCanvas onProjectSelect={handleProjectSelect} projects={projects} />
       <div className="absolute bottom-4 left-4 text-white text-sm bg-black/50 p-2 rounded">
-        <p>Use arrow keys or WASD to move, W or spacebar to jump</p>
-        <p>Crouch on a project button to view its content</p>
+        <p>Use arrow keys or WASD to move, W to jump</p>
+        <p>Crouch (down arrow or S) on a project button to view its content</p>
       </div>
     </main>
   )
