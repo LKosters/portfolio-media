@@ -30,16 +30,16 @@ export function drawBackground(
     ctx.drawImage(bgImage, bgWidth - parallaxOffset, -cameraY, bgWidth, bgHeight)
   } else {
     // Fallback background
-    ctx.fillStyle = "#87CEEB" // Sky blue
+    ctx.fillStyle = "#87CEEB"
     ctx.fillRect(0, 0, canvas.width, canvas.height * 0.7)
   }
 
   // Draw grass
-  ctx.fillStyle = "#4CAF50" // Green
+  ctx.fillStyle = "#4CAF50"
   ctx.fillRect(0, GROUND_LEVEL - 20 - cameraY, canvas.width, 70)
 
   // Draw ground
-  ctx.fillStyle = "#8B4513" // Brown
+  ctx.fillStyle = "#8B4513"
   ctx.fillRect(0, GROUND_LEVEL + 50 - cameraY, canvas.width, canvas.height - GROUND_LEVEL)
 
   // Draw screen borders
@@ -81,7 +81,7 @@ export function drawRocks(
     const rockX = rock.x - cameraX + canvas.width / 2
     
     if (rockX > -rock.width && rockX < canvas.width) {
-      ctx.fillStyle = "#8B4513" // Brown
+      ctx.fillStyle = "#8B4513"
       ctx.beginPath()
       ctx.moveTo(rockX, rock.y - cameraY)
       ctx.lineTo(rockX + rock.width, rock.y - cameraY)
@@ -90,7 +90,7 @@ export function drawRocks(
       ctx.fill()
       
       // Add some texture
-      ctx.fillStyle = "#A0522D" // Slightly lighter brown
+      ctx.fillStyle = "#A0522D"
       ctx.beginPath()
       ctx.moveTo(rockX + rock.width / 4, rock.y - rock.height / 2 - cameraY)
       ctx.lineTo(rockX + rock.width * 3/4, rock.y - rock.height / 2 - cameraY)
@@ -113,10 +113,10 @@ export function drawWelcomeSign(
   
   if (welcomeX > -500 && welcomeX < canvas.width) {
     // Draw welcome sign
-    ctx.fillStyle = "#000000" // Black shadow
+    ctx.fillStyle = "#000000"
     ctx.fillRect(welcomeX - 204, GROUND_LEVEL - 350 - cameraY, 504, 154)
 
-    ctx.fillStyle = "#FFD700" // Gold background
+    ctx.fillStyle = "#FFD700"
     ctx.fillRect(welcomeX - 200, GROUND_LEVEL - 354 - cameraY, 500, 150)
 
     ctx.strokeStyle = "#000000"

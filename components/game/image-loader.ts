@@ -66,7 +66,6 @@ export function useGameImages() {
       } catch (error) {
         console.error("Error loading images:", error)
         setDebugInfo(`Error loading images: ${error}`)
-        // Continue even if images fail to load - we'll use fallbacks
         setImagesLoaded(true)
       }
     }

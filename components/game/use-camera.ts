@@ -77,14 +77,12 @@ export function useCamera() {
     if (!cameraRef.current.isMoving) return
 
     const newProgress = cameraRef.current.animationProgress + 1
-    // Don't update if the animation progress didn't change (prevents unnecessary re-renders)
     if (newProgress === previousAnimationRef.current) return
 
     previousAnimationRef.current = newProgress
     const progress = newProgress / cameraRef.current.animationDuration
     
     if (progress >= 1) {
-      // Animation complete
       setCamera(prev => ({
         ...prev,
         y: prev.targetY,
@@ -92,7 +90,6 @@ export function useCamera() {
         animationProgress: 0
       }))
     } else {
-      // Apply easing based on direction
       const easedProgress = cameraRef.current.targetY > cameraRef.current.y 
         ? easeOutQuart(progress)
         : easeInOutQuart(progress)
@@ -108,10 +105,8 @@ export function useCamera() {
     }
   }, [])
 
-  // Function to view a project - memoize to avoid creating new function references
   const viewProject = useCallback((projectId: string | null) => {
     if (projectId === null) {
-      // Reset camera position with animation
       setCamera(prev => ({
         ...prev,
         targetY: 0,
@@ -122,9 +117,7 @@ export function useCamera() {
         startY: prev.y
       }))
     } else {
-      // Only update if projectId changed or not already viewing a project
       if (cameraRef.current.viewingProject !== projectId) {
-        // Move camera to sky position with animation
         setCamera(prev => ({
           ...prev,
           targetY: -1000,

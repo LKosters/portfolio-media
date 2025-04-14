@@ -13,9 +13,9 @@ export function drawPortfolioView(
   
   // Draw sky gradient
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-  gradient.addColorStop(0, '#001F3F')  // Dark blue at top
-  gradient.addColorStop(0.5, '#0074D9') // Medium blue in middle
-  gradient.addColorStop(1, '#7FDBFF')   // Light blue at bottom
+  gradient.addColorStop(0, '#001F3F')
+  gradient.addColorStop(0.5, '#0074D9')
+  gradient.addColorStop(1, '#7FDBFF')
   ctx.fillStyle = gradient
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -24,7 +24,7 @@ export function drawPortfolioView(
   for (let i = 0; i < 100; i++) {
     const x = (Math.sin(i * 567) + 1) * canvas.width / 2
     const y = (Math.cos(i * 321) + 1) * canvas.height / 2
-    const size = (Math.sin(i * 123) + 1) * 1.5 + 0.5 // Range: 0.5 to 3.5
+    const size = (Math.sin(i * 123) + 1) * 1.5 + 0.5
     ctx.beginPath()
     ctx.arc(x, y, size, 0, Math.PI * 2)
     ctx.fill()
@@ -34,8 +34,8 @@ export function drawPortfolioView(
   ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
   const time = Date.now() / 3000
   for (let i = 0; i < 5; i++) {
-    const x = ((time + i * 1.5) % 2) * (canvas.width + 200) - 100 // Move from left to right
-    const y = 100 + i * 60 // Space clouds vertically
+    const x = ((time + i * 1.5) % 2) * (canvas.width + 200) - 100
+    const y = 100 + i * 60
     
     // Draw cloud shape using multiple overlapping circles
     ctx.beginPath()

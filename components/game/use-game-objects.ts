@@ -20,20 +20,18 @@ export function useGameObjects(projects: Project[]) {
 
   // Initialize game objects (portfolio items) with fixed positions
   useEffect(() => {
-    // Calculate fixed positions for buttons with proper spacing
-    // Use wider spacing to account for the increased button width
     const buttonPositions = [
-      0,      // First button position - moved leftward to be fully visible  
-      600,    // Second button position
-      1200,   // Third button position
-      1800,   // Fourth button position
-      2400    // Fifth button position (if needed)
+      0,
+      600,
+      1200,
+      1800,
+      2400
     ]
 
     const objects = projects.map((project, index) => ({
       id: project.id,
       title: project.title,
-      x: buttonPositions[index] || index * 600, // Wider spacing between buttons (600px)
+      x: buttonPositions[index] || index * 600,
       y: BUTTON_Y,
       width: BUTTON_WIDTH,
       height: BUTTON_HEIGHT,
@@ -45,11 +43,11 @@ export function useGameObjects(projects: Project[]) {
 
     // Initialize rocks
     const rockPositions = [
-      1900 // Keep only the last rock position
+      1900
     ]
 
     const rockObjects = rockPositions.map((x, index) => ({
-      id: index + 100, // Use IDs starting from 100 to avoid conflicts with project IDs
+      id: index + 100,
       x,
       y: GROUND_LEVEL - ROCK_HEIGHT,
       width: ROCK_WIDTH,
@@ -61,14 +59,12 @@ export function useGameObjects(projects: Project[]) {
 
   // Update hover state based on car position
   const updateHoverState = useCallback((car: CarState, setCar?: (value: React.SetStateAction<CarState>) => void) => {
-    // Store the car in ref to avoid unnecessary re-renders
     if (!carRef.current || 
         car.x !== carRef.current.x || 
         car.y !== carRef.current.y) {
       carRef.current = car
       
-      // Welcome sign dimensions (directly from drawWelcomeSign function)
-      const WELCOME_SIGN_X = -350 - 200; // START_POSITION_X with left offset to match visual
+      const WELCOME_SIGN_X = -350 - 200;
       const WELCOME_SIGN_Y = GROUND_LEVEL - 350;
       const WELCOME_SIGN_WIDTH = 500;
       const WELCOME_SIGN_HEIGHT = 150;
@@ -88,7 +84,6 @@ export function useGameObjects(projects: Project[]) {
         carHitbox.y + carHitbox.height <= WELCOME_SIGN_Y + 5 &&
         car.velocityY >= 0;
         
-      // If car is on welcome sign, adjust its position to stand on it
       if (isOnWelcomeSign && car.velocityY >= 0 && setCar) {
         setCar(prev => ({
           ...prev,
