@@ -6,7 +6,6 @@ import { useKeyboardControls } from "@/hooks/use-keyboard-controls"
 interface Project {
   id: string
   title: string
-  description: string
   image: string
   color: string
 }
@@ -97,7 +96,7 @@ const GROUND_LEVEL = 500
 const CAR_WIDTH = 120
 const CAR_HEIGHT = 60
 const BUTTON_HEIGHT = 80
-const BUTTON_WIDTH = 200
+const BUTTON_WIDTH = 240
 const BUTTON_Y = GROUND_LEVEL - 180 // Buttons hover above the ground
 const START_POSITION_X = -200 // Starting X position for the car (adjusted for new welcome sign position)
 const LEFT_BOUNDARY = -500 // Extended left boundary to allow driving into mountain area
@@ -475,7 +474,7 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
         ctx.fillText("Crouch on a project button to view its content", welcomeX + 50, GROUND_LEVEL - 244 - cameraRef.current.y)
       }
 
-      // Draw portfolio items (hovering buttons)
+      // Button component
       gameObjects.forEach((obj) => {
         const cameraX = Math.max(CAMERA_LEFT_BOUNDARY, Math.min(CAMERA_RIGHT_BOUNDARY, car.x))
         const buttonX = obj.x - cameraX + canvas.width / 2
@@ -552,8 +551,10 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
         const scoreText = car.score.toLocaleString()
         const scoreX = carScreenX + CAR_WIDTH / 2
         const scoreY = car.y - 40 - cameraRef.current.y
-        ctx.strokeText(scoreText, scoreX, scoreY)
-        ctx.fillText(scoreText, scoreX, scoreY)
+        if (car.score > 0) {
+          ctx.strokeText(scoreText, scoreX, scoreY)
+          ctx.fillText(scoreText, scoreX, scoreY)
+        }
         ctx.restore()
 
         if (car.isFlipping) {
@@ -1039,7 +1040,7 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
           spinAngle = 0
           
           // Add a small upward velocity to make the spin more dramatic
-          newVelocityY = JUMP_FORCE * 0.5
+          newVelocityY = JUMP_FORCE * 0.3
           isJumping = true
           wasInAir = true
           
@@ -1190,6 +1191,13 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
         } else if (newX > RIGHT_BOUNDARY - CAR_WIDTH) {
           newX = RIGHT_BOUNDARY - CAR_WIDTH
           newVelocityX = 0
+        }
+
+        // Add top boundary to prevent car from going above the screen
+        const TOP_BOUNDARY = 0
+        if (newY < TOP_BOUNDARY) {
+          newY = TOP_BOUNDARY
+          newVelocityY = 0
         }
 
         // Check collision with rocks

@@ -9,41 +9,35 @@ export default function Home() {
   // Portfolio projects data
   const projects = [
     {
-      id: "home",
-      title: "Home",
-      description: "Welcome to my portfolio",
-      image: "/placeholder.svg?height=300&width=400",
-      details:
-        "Welcome to my interactive portfolio! Use the arrow keys or WASD to drive the car and explore my projects. Touch the hovering buttons to learn more about each project.",
-      color: "#FF6B6B", // Red
-    },
-    {
       id: "branding",
       title: "Project Branding",
-      description: "Brand identity and logo design",
       image: "/placeholder.svg?height=300&width=400",
-      details:
-        "I create memorable brand identities that resonate with target audiences. My branding work includes logo design, color palettes, typography, and brand guidelines.",
-      color: "#4ECDC4", // Teal
+      color: "#4ECDC4",
     },
     {
       id: "devsnip",
       title: "Project DevSnip",
-      description: "Web development and coding projects",
       image: "/placeholder.svg?height=300&width=400",
-      details:
-        "DevSnip is a collection of my web development projects. I specialize in creating responsive, user-friendly websites and applications using modern technologies like React, Next.js, and more.",
-      color: "#6ECBF5", // Blue
+      color: "#6ECBF5",
     },
     {
-      id: "gamedev",
-      title: "Project GameDev",
-      description: "Game development and interactive experiences",
+      id: "project-ux",
+      title: "Project UX",
       image: "/placeholder.svg?height=300&width=400",
-      details:
-        "I create engaging games and interactive experiences using web technologies. This portfolio itself is an example of my game development skills!",
-      color: "#FFD166", // Yellow
+      color: "#FFD166",
     },
+    {
+      id: "project-development",
+      title: "Project Development",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#FF6B6B",
+    },
+    {
+      id: "project-x",
+      title: "Project X",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#FFB400",
+    }
   ]
 
   useEffect(() => {
