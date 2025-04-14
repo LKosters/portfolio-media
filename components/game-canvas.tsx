@@ -89,38 +89,39 @@ interface CameraState {
 
 const GRAVITY = 0.5
 const JUMP_FORCE = -15
-const ACCELERATION = 0.5 // How quickly the car speeds up
-const MAX_VELOCITY = 20 // Maximum speed the car can reach
-const FRICTION = 0.98 // How quickly the car slows down
+const ACCELERATION = 0.5
+const MAX_VELOCITY = 20
+const FRICTION = 0.98
 const GROUND_LEVEL = 500
 const CAR_WIDTH = 120
 const CAR_HEIGHT = 60
 const BUTTON_HEIGHT = 80
 const BUTTON_WIDTH = 240
-const BUTTON_Y = GROUND_LEVEL - 180 // Buttons hover above the ground
-const START_POSITION_X = -200 // Starting X position for the car (adjusted for new welcome sign position)
-const LEFT_BOUNDARY = -500 // Extended left boundary to allow driving into mountain area
-const RIGHT_BOUNDARY = 2500 // Extended right boundary to allow driving into mountain area
-const CAMERA_LEFT_BOUNDARY = 50 // Camera stops here, but car can go further left
-const CAMERA_RIGHT_BOUNDARY = 1800 // Camera stops here, but car can go further right
+const BUTTON_Y = GROUND_LEVEL - 180
+const START_POSITION_X = -200
+const LEFT_BOUNDARY = -500
+const RIGHT_BOUNDARY = 2500
+const CAMERA_LEFT_BOUNDARY = 50
+const CAMERA_RIGHT_BOUNDARY = 1800
 const ROCK_WIDTH = 30
 const ROCK_HEIGHT = 20
-const FLIP_SPEED = 15 // Degrees per frame
+const FLIP_SPEED = 15
 const SPEEDOMETER_RADIUS = 80
-const MAX_SPEED_MPH = 300 // Maximum speed on the speedometer (changed from 120 to 300)
-const SPEED_MULTIPLIER = 15 // Adjusted to match new physics
-const DASH_FORCE = 30 // Force applied when dashing
-const DASH_DURATION = 10 // Duration of dash in frames
-const DASH_COOLDOWN = 120 // Cooldown for dash in frames (2 seconds at 60fps)
-const COMBO_TIMEOUT = 3000 // Time in ms before combo expires
-const COMBO_MULTIPLIER_INCREASE = 0.5 // How much to increase the combo multiplier by
-const MAX_COMBO_MULTIPLIER = 10 // Maximum combo multiplier
-const SCORE_POPUP_LIFETIME = 60 // Frames the score popup will last
+const MAX_SPEED_MPH = 300
+const SPEED_MULTIPLIER = 15
+const DASH_FORCE = 30
+const DASH_DURATION = 10
+const DASH_COOLDOWN = 120
+const COMBO_TIMEOUT = 3000
+const COMBO_MULTIPLIER_INCREASE = 0.5
+const MAX_COMBO_MULTIPLIER = 10
+const SCORE_POPUP_LIFETIME = 60
 const TRICK_SCORES: Record<string, number> = {
   'Front Flip': 1000,
   'Side Flip': 1500,
   'Barrel Roll': 2000,
-  'Speed Dash': 800
+  'Speed Dash': 800,
+  'Turbo Boost': 800
 }
 
 export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProps) {
@@ -1096,8 +1097,25 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
           // Apply dash force in the direction the car is facing
           newVelocityX = DASH_FORCE * newDirection
 
+          // Update combo
+          const now = Date.now();
+          if (now - lastTrickTime < COMBO_TIMEOUT) {
+            combo = Math.min(combo + COMBO_MULTIPLIER_INCREASE, MAX_COMBO_MULTIPLIER);
+            comboTimeLeft = COMBO_TIMEOUT;
+            lastTrickTime = now;
+            tricksPerformed.push('Turbo Boost');
+            if (tricksPerformed.length > 5) {
+              tricksPerformed = tricksPerformed.slice(-5);
+            }
+          } else {
+            combo = 1 + COMBO_MULTIPLIER_INCREASE;
+            comboTimeLeft = COMBO_TIMEOUT;
+            lastTrickTime = now;
+            tricksPerformed = ['Turbo Boost'];
+          }
+
           // Add score for dash
-          const dashScore = TRICK_SCORES['Speed Dash'] * combo
+          const dashScore = TRICK_SCORES['Turbo Boost'] * combo
           score += dashScore
           
           // Add score popup
