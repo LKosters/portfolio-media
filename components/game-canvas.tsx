@@ -78,9 +78,9 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
   // if it needs to update based on car position
   useEffect(() => {
     if (car) {
-      updateHoverState(car)
+      updateHoverState(car, setCar)
     }
-  }, [updateHoverState, car.x, car.y])
+  }, [updateHoverState, car.x, car.y, setCar])
 
   // Main game loop
   useEffect(() => {

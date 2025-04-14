@@ -60,22 +60,47 @@ export function useGameObjects(projects: Project[]) {
   }, [projects])
 
   // Update hover state based on car position
-  const updateHoverState = useCallback((car: CarState) => {
+  const updateHoverState = useCallback((car: CarState, setCar?: (value: React.SetStateAction<CarState>) => void) => {
     // Store the car in ref to avoid unnecessary re-renders
     if (!carRef.current || 
         car.x !== carRef.current.x || 
         car.y !== carRef.current.y) {
       carRef.current = car
       
+      // Welcome sign dimensions (directly from drawWelcomeSign function)
+      const WELCOME_SIGN_X = -350 - 200; // START_POSITION_X with left offset to match visual
+      const WELCOME_SIGN_Y = GROUND_LEVEL - 350;
+      const WELCOME_SIGN_WIDTH = 500;
+      const WELCOME_SIGN_HEIGHT = 150;
+      
+      const carHitbox = {
+        x: car.x,
+        y: car.y,
+        width: CAR_WIDTH,
+        height: CAR_HEIGHT,
+      }
+      
+      // Check if car is standing on top of the welcome sign
+      const isOnWelcomeSign = 
+        carHitbox.x + carHitbox.width > WELCOME_SIGN_X &&
+        carHitbox.x < WELCOME_SIGN_X + WELCOME_SIGN_WIDTH &&
+        carHitbox.y + carHitbox.height >= WELCOME_SIGN_Y - 5 &&
+        carHitbox.y + carHitbox.height <= WELCOME_SIGN_Y + 5 &&
+        car.velocityY >= 0;
+        
+      // If car is on welcome sign, adjust its position to stand on it
+      if (isOnWelcomeSign && car.velocityY >= 0 && setCar) {
+        setCar(prev => ({
+          ...prev,
+          y: WELCOME_SIGN_Y - CAR_HEIGHT,
+          velocityY: 0,
+          isJumping: false,
+          wasInAir: false
+        }));
+      }
+      
       setGameObjects(prev => 
         prev.map(obj => {
-          const carHitbox = {
-            x: car.x,
-            y: car.y,
-            width: CAR_WIDTH,
-            height: CAR_HEIGHT,
-          }
-
           const objHitbox = {
             x: obj.x,
             y: obj.y,

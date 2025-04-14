@@ -43,9 +43,9 @@ export function drawBackground(
   ctx.fillRect(0, GROUND_LEVEL + 50 - cameraY, canvas.width, canvas.height - GROUND_LEVEL)
 
   // Draw screen borders
-  ctx.fillStyle = "#000000" // Black
-  ctx.fillRect(0, 0, 10, canvas.height) // Left border
-  ctx.fillRect(canvas.width - 10, 0, 10, canvas.height) // Right border
+//   ctx.fillStyle = "#000000" // Black
+//   ctx.fillRect(0, 0, 10, canvas.height) // Left border
+//   ctx.fillRect(canvas.width - 10, 0, 10, canvas.height) // Right border
 }
 
 // Function to draw the road
@@ -108,7 +108,7 @@ export function drawWelcomeSign(
   cameraX: number,
   cameraY: number
 ) {
-  const START_POSITION_X = -200
+  const START_POSITION_X = -350
   const welcomeX = START_POSITION_X - cameraX + canvas.width / 2
   
   if (welcomeX > -500 && welcomeX < canvas.width) {
