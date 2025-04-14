@@ -54,11 +54,21 @@ const initialCarState: CarState = {
   airTime: 0,
   tricksPerformed: [],
   score: 0,
+  highScore: 0,
   scorePopups: []
 }
 
 export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
-  const [car, setCar] = useState<CarState>(initialCarState)
+  const [car, setCar] = useState<CarState>(() => {
+    // Load high score from local storage when component mounts
+    const savedHighScore = typeof window !== 'undefined' ? 
+      parseInt(localStorage.getItem('carGameHighScore') || '0', 10) : 0;
+    
+    return {
+      ...initialCarState,
+      highScore: savedHighScore
+    };
+  });
   const { keys } = useKeyboardControls()
 
   useEffect(() => {
@@ -87,6 +97,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
         let airTime = prevCar.airTime
         let tricksPerformed = [...prevCar.tricksPerformed]
         let score = prevCar.score
+        let highScore = prevCar.highScore
         let scorePopups = prevCar.scorePopups
           .map(popup => ({
             ...popup,
@@ -103,7 +114,16 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           airTime = 0
         }
 
-        // Function to reset combo and score
+        // Check for new high score
+        if (score > highScore) {
+          highScore = score;
+          // Save high score to local storage
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('carGameHighScore', highScore.toString());
+          }
+        }
+
+        // Reset combo and score function with high score handling
         const resetComboAndScore = () => {
           if (combo > 1) {
             // Add final score popup before resetting
@@ -118,6 +138,16 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
             }
             // Show final combo score
             console.log(`Final combo: ${combo.toFixed(1)}x with ${tricksPerformed.length} tricks!`)
+
+            // Check for new high score before resetting
+            if (score > highScore) {
+              highScore = score;
+              // Save high score to local storage
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('carGameHighScore', highScore.toString());
+              }
+            }
+            
             combo = 1
             comboTimeLeft = 0
             tricksPerformed = []
@@ -446,6 +476,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           airTime,
           tricksPerformed,
           score,
+          highScore,
           scorePopups
         }
       })

@@ -16,6 +16,7 @@ import {
   drawCar,
   drawSpeedometer,
   drawComboMeter,
+  drawHighScore,
   getCameraX,
   drawPortfolioView
 } from "./game"
@@ -112,6 +113,7 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
       drawCar(ctx, canvas, car, images.car, images.crouch, images.crash, cameraX, cameraY)
       drawSpeedometer(ctx, canvas, car)
       drawComboMeter(ctx, car)
+      drawHighScore(ctx, canvas, car.highScore)
 
       // Draw portfolio content if viewing a project
       drawPortfolioView(ctx, canvas, camera, portfolioContent, isLoadingContent)

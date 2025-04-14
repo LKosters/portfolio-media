@@ -400,4 +400,26 @@ export function drawComboMeter(
       ctx.fillText(trick, 30, 70 + index * 12)
     })
   }
+}
+
+// Function to draw high score
+export function drawHighScore(
+  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
+  highScore: number
+) {
+  // Draw high score background
+  ctx.fillStyle = "rgba(0, 0, 0, 0.7)"
+  ctx.fillRect(canvas.width / 2 - 120, 10, 240, 40)
+  
+  // Add a border
+  ctx.strokeStyle = "#FFD700" // Gold color
+  ctx.lineWidth = 2
+  ctx.strokeRect(canvas.width / 2 - 120, 10, 240, 40)
+  
+  // Draw high score text
+  ctx.fillStyle = "#FFD700" // Gold color
+  ctx.font = "bold 20px monospace"
+  ctx.textAlign = "center"
+  ctx.fillText(`HIGH SCORE: ${highScore.toLocaleString()}`, canvas.width / 2, 35)
 } 

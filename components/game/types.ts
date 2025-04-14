@@ -53,6 +53,7 @@ export interface CarState {
   airTime: number
   tricksPerformed: string[]
   score: number
+  highScore: number
   scorePopups: ScorePopup[]
 }
 
