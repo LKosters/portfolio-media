@@ -406,20 +406,57 @@ export function drawComboMeter(
 export function drawHighScore(
   ctx: CanvasRenderingContext2D,
   canvas: HTMLCanvasElement,
-  highScore: number
+  highScore: number,
+  onInfoClick: () => void
 ) {
+  // Calculate positions
+  const boxWidth = 280;
+  const boxHeight = 40;
+  const boxX = canvas.width / 2 - boxWidth / 2;
+  const boxY = 10;
+  
   // Draw high score background
   ctx.fillStyle = "rgba(0, 0, 0, 0.7)"
-  ctx.fillRect(canvas.width / 2 - 120, 10, 240, 40)
+  ctx.fillRect(boxX, boxY, boxWidth, boxHeight)
   
   // Add a border
   ctx.strokeStyle = "#FFD700" // Gold color
   ctx.lineWidth = 2
-  ctx.strokeRect(canvas.width / 2 - 120, 10, 240, 40)
+  ctx.strokeRect(boxX, boxY, boxWidth, boxHeight)
   
   // Draw high score text
   ctx.fillStyle = "#FFD700" // Gold color
   ctx.font = "bold 20px monospace"
   ctx.textAlign = "center"
-  ctx.fillText(`HIGH SCORE: ${highScore.toLocaleString()}`, canvas.width / 2, 35)
+  ctx.fillText(`HIGH SCORE: ${highScore.toLocaleString()}`, canvas.width / 2 - 20, boxY + 25)
+  
+  // Draw info icon (circle with i)
+  const iconX = boxX + boxWidth - 25;
+  const iconY = boxY + boxHeight / 2;
+  const iconRadius = 12;
+  
+  // Save the info icon position and dimensions for click detection
+  // Store this in a closure variable for access in the game loop
+  if (typeof window !== 'undefined') {
+    (window as any).infoIconHitbox = {
+      x: iconX - iconRadius,
+      y: iconY - iconRadius,
+      width: iconRadius * 2,
+      height: iconRadius * 2,
+      onClick: onInfoClick
+    };
+  }
+  
+  // Draw circle
+  ctx.beginPath();
+  ctx.arc(iconX, iconY, iconRadius, 0, Math.PI * 2);
+  ctx.fillStyle = "#FFD700";
+  ctx.fill();
+  
+  // Draw 'i' character
+  ctx.fillStyle = "#000000";
+  ctx.font = "bold 14px serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("i", iconX, iconY);
 } 

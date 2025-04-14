@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef, useCallback, useState } from "react"
 import { 
   GameCanvasProps,
   useCamera,
@@ -20,6 +20,7 @@ import {
   getCameraX,
   drawPortfolioView
 } from "./game"
+import { HighScoreModal } from "./game/high-score-modal"
 
 export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -28,11 +29,46 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
   const { car, setCar } = useCarPhysics(gameObjects, rocks)
   const { images, debugInfo } = useGameImages()
   const { portfolioContent, isLoadingContent } = usePortfolioContent(camera)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Add event listener for canvas clicks to detect info icon clicks
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const handleCanvasClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      // Check if the click is on the info icon
+      const infoIcon = (window as any).infoIconHitbox
+      if (infoIcon && 
+          x >= infoIcon.x && 
+          x <= infoIcon.x + infoIcon.width &&
+          y >= infoIcon.y && 
+          y <= infoIcon.y + infoIcon.height) {
+        // Handle info icon click
+        infoIcon.onClick()
+      }
+    }
+
+    canvas.addEventListener('click', handleCanvasClick)
+
+    return () => {
+      canvas.removeEventListener('click', handleCanvasClick)
+    }
+  }, [])
 
   // Memoize the onProjectSelect handler to avoid unnecessary rerenders
   const handleProjectSelect = useCallback((projectId: string) => {
     onProjectSelect(projectId)
   }, [onProjectSelect])
+
+  // Handle opening the high score modal
+  const handleInfoClick = useCallback(() => {
+    setIsModalOpen(true)
+  }, [])
 
   // Handle window resize
   useEffect(() => {
@@ -113,7 +149,7 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
       drawCar(ctx, canvas, car, images.car, images.crouch, images.crash, cameraX, cameraY)
       drawSpeedometer(ctx, canvas, car)
       drawComboMeter(ctx, car)
-      drawHighScore(ctx, canvas, car.highScore)
+      drawHighScore(ctx, canvas, car.highScore, handleInfoClick)
 
       // Draw portfolio content if viewing a project
       drawPortfolioView(ctx, canvas, camera, portfolioContent, isLoadingContent)
@@ -144,8 +180,18 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
     car,
     gameObjects,
     rocks,
-    debugInfo
+    debugInfo,
+    handleInfoClick
   ])
 
-  return <canvas ref={canvasRef} className="w-full h-full" />
+  return (
+    <>
+      <canvas ref={canvasRef} className="w-full h-full" />
+      <HighScoreModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        currentScore={car.highScore}
+      />
+    </>
+  )
 }
