@@ -46,6 +46,8 @@ export interface CarState {
   spinAxis: 'x' | 'y' | 'z'
   isDashing: boolean
   dashCooldown: number
+  canDoubleJump: boolean
+  keys?: { [key: string]: boolean }
   selectedProjectId: string | null
   combo: number
   comboTimeLeft: number

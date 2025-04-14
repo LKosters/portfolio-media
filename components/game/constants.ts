@@ -39,7 +39,8 @@ export const TRICK_SCORES: Record<string, number> = {
   'Side Flip': 1500,
   'Barrel Roll': 2000,
   'Speed Dash': 800,
-  'Turbo Boost': 800
+  'Turbo Boost': 800,
+  'Double Jump': 500
 }
 
 // Easing functions

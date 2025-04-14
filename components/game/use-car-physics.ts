@@ -47,6 +47,8 @@ const initialCarState: CarState = {
   spinAxis: 'x',
   isDashing: false,
   dashCooldown: 0,
+  canDoubleJump: false,
+  keys: {},
   selectedProjectId: null,
   combo: 1,
   comboTimeLeft: 0,
@@ -80,7 +82,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
         let newY = prevCar.y
         let newDirection = prevCar.direction
         let isJumping = prevCar.isJumping
-        const isCrouching = keys.down
+        let isCrouching = keys.down
         let isCrashed = prevCar.isCrashed
         let wasInAir = prevCar.wasInAir
         let isFlipping = prevCar.isFlipping
@@ -90,6 +92,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
         let spinAxis = prevCar.spinAxis
         let isDashing = prevCar.isDashing
         let dashCooldown = prevCar.dashCooldown > 0 ? prevCar.dashCooldown - 1 : 0
+        let canDoubleJump = prevCar.canDoubleJump
         let selectedProjectId = prevCar.selectedProjectId
         let combo = prevCar.combo
         let comboTimeLeft = prevCar.comboTimeLeft > 0 ? prevCar.comboTimeLeft - 16.67 : 0 // Decrease by ~16.67ms (60fps)
@@ -177,6 +180,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           newVelocityY = JUMP_FORCE * 0.3
           isJumping = true
           wasInAir = true
+          canDoubleJump = true // Enable double jump when first jump occurs
           
           // Update combo
           const now = Date.now()
@@ -306,10 +310,46 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
             }
 
             // Handle jumping - now with W key
-            if (keys.up && !isJumping) {
+            if (keys.up && !prevCar.keys?.up && !isJumping && !wasInAir) {
               newVelocityY = JUMP_FORCE
               isJumping = true
               wasInAir = true
+              canDoubleJump = true // Enable double jump when first jump occurs
+            }
+            // Handle double jump when already in the air
+            else if (keys.up && !prevCar.keys?.up && wasInAir && canDoubleJump) {
+              newVelocityY = JUMP_FORCE // Full strength double jump
+              canDoubleJump = false // Use up the double jump
+              
+              // Add combo for double jump
+              const now = Date.now()
+              if (now - lastTrickTime < COMBO_TIMEOUT) {
+                combo = Math.min(combo + COMBO_MULTIPLIER_INCREASE, MAX_COMBO_MULTIPLIER)
+                comboTimeLeft = COMBO_TIMEOUT
+                lastTrickTime = now
+                tricksPerformed.push('Double Jump')
+                if (tricksPerformed.length > 5) {
+                  tricksPerformed = tricksPerformed.slice(-5)
+                }
+              } else {
+                combo = 1 + COMBO_MULTIPLIER_INCREASE
+                comboTimeLeft = COMBO_TIMEOUT
+                lastTrickTime = now
+                tricksPerformed = ['Double Jump']
+              }
+              
+              // Add score for double jump
+              const jumpScore = TRICK_SCORES['Double Jump'] * combo
+              score += jumpScore
+              
+              // Add score popup
+              scorePopups.push({
+                value: jumpScore,
+                x: newX + CAR_WIDTH / 2,
+                y: newY - 20,
+                age: 0,
+                opacity: 1
+              })
             }
             
             // Handle 3D spin - with spacebar
@@ -447,6 +487,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
             newVelocityY = 0
             isJumping = false
             wasInAir = false
+            canDoubleJump = false // Reset double jump when landing on a button
             selectedProjectId = obj.id // Set selected project when on top of button
             break
           }
@@ -477,6 +518,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
             resetComboAndScore();
           }
           wasInAir = false;
+          canDoubleJump = false; // Reset double jump when landing on welcome sign
           isOnButton = true; // Prevent ground collision check
         }
 
@@ -490,6 +532,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
             resetComboAndScore()
           }
           wasInAir = false
+          canDoubleJump = false // Reset double jump when landing
         } else if (newVelocityY > 0) {
           // Car is falling
           wasInAir = true
@@ -512,6 +555,8 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
           spinAxis,
           isDashing,
           dashCooldown,
+          canDoubleJump,
+          keys: { ...keys }, // Store current key states for next frame
           selectedProjectId,
           combo,
           comboTimeLeft,
