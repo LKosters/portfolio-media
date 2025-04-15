@@ -207,15 +207,25 @@ export function drawCar(
     }
     ctx.restore()
 
+    // Calculate dimensions to maintain aspect ratio (object-fit: contain)
+    const imgWidth = currentCarImage.width || CAR_WIDTH
+    const imgHeight = currentCarImage.height || CAR_HEIGHT
+    const scale = Math.min(CAR_WIDTH / imgWidth, CAR_HEIGHT / imgHeight)
+    const scaledWidth = imgWidth * scale
+    const scaledHeight = imgHeight * scale
+    const offsetX = (CAR_WIDTH - scaledWidth) / 2
+    // Align the bottom of the car with the road by calculating the vertical offset
+    const offsetY = CAR_HEIGHT - scaledHeight
+
     if (car.isFlipping) {
       ctx.save()
       ctx.translate(carScreenX + CAR_WIDTH / 2, car.y + CAR_HEIGHT / 2 - cameraY)
       ctx.rotate((car.flipAngle * Math.PI) / 180)
       if (car.direction === -1) {
-        ctx.drawImage(currentCarImage, -CAR_WIDTH / 2, -CAR_HEIGHT / 2, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight)
       } else {
         ctx.scale(-1, 1)
-        ctx.drawImage(currentCarImage, -CAR_WIDTH / 2, -CAR_HEIGHT / 2, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight)
       }
       ctx.restore()
     } else if (car.isSpinning) {
@@ -237,21 +247,21 @@ export function drawCar(
       
       // Draw the car centered at the rotation point
       if (car.direction === -1) {
-        ctx.drawImage(currentCarImage, -CAR_WIDTH / 2, -CAR_HEIGHT / 2, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight)
       } else {
         ctx.scale(-1, 1)
-        ctx.drawImage(currentCarImage, -CAR_WIDTH / 2, -CAR_HEIGHT / 2, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight)
       }
       
       ctx.restore()
     } else {
       if (car.direction === -1) {
-        ctx.drawImage(currentCarImage, carScreenX, car.y - cameraY, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, carScreenX + offsetX, car.y - cameraY + offsetY, scaledWidth, scaledHeight)
       } else {
         ctx.save()
         ctx.translate(carScreenX + CAR_WIDTH, car.y - cameraY)
         ctx.scale(-1, 1)
-        ctx.drawImage(currentCarImage, 0, 0, CAR_WIDTH, CAR_HEIGHT)
+        ctx.drawImage(currentCarImage, offsetX, offsetY, scaledWidth, scaledHeight)
         ctx.restore()
       }
     }
