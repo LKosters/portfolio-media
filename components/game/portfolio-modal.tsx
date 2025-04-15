@@ -28,10 +28,21 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
             return <h1 key={index} className="text-2xl text-blue-400 font-bold mb-4">{line.substring(2)}</h1>
           } else if (line.startsWith('## ')) {
             return <h2 key={index} className="text-xl text-blue-400 font-bold mb-3">{line.substring(3)}</h2>
+          } else if (line.startsWith('### ')) {
+            return <h3 key={index} className="text-lg text-blue-300 font-semibold mb-2">{line.substring(4)}</h3>
+          } else if (line.startsWith('> ')) {
+            return <blockquote key={index} className="border-l-4 border-blue-500 pl-4 italic my-3 text-gray-300">{line.substring(2)}</blockquote>
           } else if (line.startsWith('- ')) {
             return <li key={index} className="mb-2 ml-5">{line.substring(2)}</li>
           } else if (line.trim() === '') {
             return <div key={index} className="h-4"></div>
+          } else if (line.match(/!\[.*?\]\(.*?\)/)) {
+            // Handle image markdown: ![alt text](url)
+            const altMatch = line.match(/!\[(.*?)\]/)
+            const urlMatch = line.match(/\((.*?)\)/)
+            const alt = altMatch ? altMatch[1] : ''
+            const url = urlMatch ? urlMatch[1] : ''
+            return <img key={index} src={url} alt={alt} className="max-w-full my-4 rounded" />
           } else {
             return <p key={index} className="mb-3">{line}</p>
           }
