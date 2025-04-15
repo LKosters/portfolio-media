@@ -23,11 +23,17 @@ export function drawBackground(
   if (bgImage && bgImage.complete) {
     const bgWidth = canvas.width
     const bgHeight = canvas.height
-    const parallaxOffset = (cameraX * 0.1) % bgWidth
+    
+    // Use a proper modulo operation that works with negative numbers
+    const mod = (n: number, m: number) => ((n % m) + m) % m
+    const parallaxOffset = mod(cameraX * 0.1, bgWidth)
 
     // Draw background layers with camera offset
     ctx.drawImage(bgImage, -parallaxOffset, -cameraY, bgWidth, bgHeight)
     ctx.drawImage(bgImage, bgWidth - parallaxOffset, -cameraY, bgWidth, bgHeight)
+    
+    // Add another image on the left side for negative parallaxing
+    ctx.drawImage(bgImage, -parallaxOffset - bgWidth, -cameraY, bgWidth, bgHeight)
   } else {
     // Fallback background
     ctx.fillStyle = "#87CEEB"
@@ -60,10 +66,17 @@ export function drawRoad(
     const roadHeight = 50
     const roadY = GROUND_LEVEL - cameraY
     const roadWidth = roadImage.width || 100
-    const repeats = Math.ceil(canvas.width / roadWidth) + 1
-
-    for (let i = 0; i < repeats; i++) {
-      const xPos = i * roadWidth - (cameraX % roadWidth)
+    
+    // Add more repeats to cover both sides and ensure we have enough road tiles
+    const repeats = Math.ceil(canvas.width / roadWidth) + 2
+    
+    // Proper modulo for negative numbers
+    const mod = (n: number, m: number) => ((n % m) + m) % m
+    const offset = mod(cameraX, roadWidth)
+    
+    // Start one tile to the left to ensure coverage when moving left
+    for (let i = -1; i < repeats; i++) {
+      const xPos = i * roadWidth - offset
       ctx.drawImage(roadImage, xPos, roadY, roadWidth, roadHeight)
     }
   }
@@ -111,7 +124,12 @@ export function drawWelcomeSign(
   const START_POSITION_X = -350
   const welcomeX = START_POSITION_X - cameraX + canvas.width / 2
   
-  if (welcomeX > -500 && welcomeX < canvas.width) {
+  // More permissive visibility check - ensure sign is always visible
+  // regardless of how far left or right the player moves
+  const signWidth = 500;
+  const signPadding = 1000; // Large padding to ensure visibility
+  
+  if (welcomeX > -signWidth - signPadding && welcomeX < canvas.width + signPadding) {
     // Draw welcome sign
     ctx.fillStyle = "#000000"
     ctx.fillRect(welcomeX - 204, GROUND_LEVEL - 350 - cameraY, 504, 154)

@@ -22,11 +22,14 @@ import {
 } from "./game"
 import { HighScoreModal } from "./game/high-score-modal"
 
-export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProps) {
+export default function GameCanvas({ onProjectSelect, projects, learningOutcomes }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { camera, cameraRef, updateCameraAnimation, viewProject } = useCamera()
-  const { gameObjects, rocks, updateHoverState } = useGameObjects(projects)
-  const { car, setCar } = useCarPhysics(gameObjects, rocks)
+  const { gameObjects, rocks, updateHoverState, boundaries } = useGameObjects(projects, learningOutcomes)
+  const { car, setCar } = useCarPhysics(gameObjects, rocks, {
+    leftBoundary: boundaries.leftBoundary,
+    rightBoundary: boundaries.rightBoundary
+  })
   const { images, debugInfo } = useGameImages()
   const { portfolioContent, isLoadingContent } = usePortfolioContent(camera)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -88,6 +91,14 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
     }
   }, [])
 
+  // Custom getCameraX function using dynamic boundaries
+  const getDynamicCameraX = useCallback((carX: number): number => {
+    return Math.max(
+      boundaries.cameraLeftBoundary, 
+      Math.min(boundaries.cameraRightBoundary, carX)
+    )
+  }, [boundaries.cameraLeftBoundary, boundaries.cameraRightBoundary])
+
   // Check for project selection
   useEffect(() => {
     // Check for crouching on portfolio items
@@ -136,8 +147,8 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
       // Update camera position with easing
       updateCameraAnimation()
 
-      // Calculate camera position
-      const cameraX = getCameraX(car.x)
+      // Calculate camera position using dynamic boundaries
+      const cameraX = getDynamicCameraX(car.x)
       const cameraY = cameraRef.current.y
 
       // Draw game elements
@@ -181,7 +192,8 @@ export default function GameCanvas({ onProjectSelect, projects }: GameCanvasProp
     gameObjects,
     rocks,
     debugInfo,
-    handleInfoClick
+    handleInfoClick,
+    getDynamicCameraX
   ])
 
   return (

@@ -8,6 +8,7 @@ export interface Project {
 export interface GameCanvasProps {
   onProjectSelect: (projectId: string) => void
   projects: Project[]
+  learningOutcomes: Project[]
 }
 
 export interface GameObject {

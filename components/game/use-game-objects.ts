@@ -10,40 +10,89 @@ import {
   ROCK_WIDTH, 
   ROCK_HEIGHT, 
   CAR_WIDTH, 
-  CAR_HEIGHT 
+  CAR_HEIGHT,
+  LEFT_BOUNDARY as DEFAULT_LEFT_BOUNDARY,
+  RIGHT_BOUNDARY as DEFAULT_RIGHT_BOUNDARY,
+  CAMERA_LEFT_BOUNDARY as DEFAULT_CAMERA_LEFT_BOUNDARY,
+  CAMERA_RIGHT_BOUNDARY as DEFAULT_CAMERA_RIGHT_BOUNDARY
 } from "./constants"
 
-export function useGameObjects(projects: Project[]) {
+export function useGameObjects(projects: Project[], learningOutcomes: Project[] = []) {
   const [gameObjects, setGameObjects] = useState<GameObject[]>([])
   const [rocks, setRocks] = useState<Rock[]>([])
+  const [boundaries, setBoundaries] = useState({
+    leftBoundary: DEFAULT_LEFT_BOUNDARY,
+    rightBoundary: DEFAULT_RIGHT_BOUNDARY,
+    cameraLeftBoundary: DEFAULT_CAMERA_LEFT_BOUNDARY,
+    cameraRightBoundary: DEFAULT_CAMERA_RIGHT_BOUNDARY
+  })
   const carRef = useRef<CarState | null>(null)
 
   // Initialize game objects (portfolio items) with fixed positions
   useEffect(() => {
-    const buttonPositions = [
-      0,
-      600,
-      1200,
-      1800,
-      2400
-    ]
+    const WELCOME_SIGN_X = -350;
+    const BUTTON_SPACING = 600;
+    const PADDING = 500; // Extra space beyond last button
+    
+    // Portfolio buttons on the right side of welcome sign
+    const portfolioButtonPositions = projects.map((_, index) => 
+      WELCOME_SIGN_X + 600 + index * BUTTON_SPACING
+    );
 
-    const objects = projects.map((project, index) => ({
+    // Learning outcome buttons on the left side of welcome sign
+    const learningButtonPositions = learningOutcomes.map((_, index) => 
+      WELCOME_SIGN_X - 600 - index * BUTTON_SPACING
+    );
+
+    // Calculate dynamic boundaries based on actual number of items
+    const rightmostItem = portfolioButtonPositions.length > 0 
+      ? portfolioButtonPositions[portfolioButtonPositions.length - 1] + BUTTON_WIDTH + PADDING
+      : WELCOME_SIGN_X + 600 + BUTTON_WIDTH + PADDING;
+    
+    const leftmostItem = learningButtonPositions.length > 0
+      ? learningButtonPositions[learningButtonPositions.length - 1] - PADDING
+      : WELCOME_SIGN_X - 600 - PADDING;
+    
+    // Update the boundaries
+    const newBoundaries = {
+      leftBoundary: leftmostItem,
+      rightBoundary: rightmostItem,
+      cameraLeftBoundary: leftmostItem + 300, // Add some offset for camera
+      cameraRightBoundary: rightmostItem - 300 // Add some offset for camera
+    };
+    
+    setBoundaries(newBoundaries);
+
+    // Create portfolio buttons
+    const portfolioObjects = projects.map((project, index) => ({
       id: project.id,
       title: project.title,
-      x: buttonPositions[index] || index * 600,
+      x: portfolioButtonPositions[index] || (WELCOME_SIGN_X + 600 + index * BUTTON_SPACING),
       y: BUTTON_Y,
       width: BUTTON_WIDTH,
       height: BUTTON_HEIGHT,
       color: project.color,
       hovered: false,
     }))
+    
+    // Create learning outcome buttons
+    const learningObjects = learningOutcomes.map((outcome, index) => ({
+      id: outcome.id,
+      title: outcome.title,
+      x: learningButtonPositions[index] || (WELCOME_SIGN_X - 600 - index * BUTTON_SPACING),
+      y: BUTTON_Y,
+      width: BUTTON_WIDTH,
+      height: BUTTON_HEIGHT,
+      color: outcome.color,
+      hovered: false,
+    }))
 
-    setGameObjects(objects)
+    // Combine both types of objects
+    setGameObjects([...portfolioObjects, ...learningObjects])
 
     // Initialize rocks
     const rockPositions = [
-      1900
+      WELCOME_SIGN_X + 1900
     ]
 
     const rockObjects = rockPositions.map((x, index) => ({
@@ -55,7 +104,7 @@ export function useGameObjects(projects: Project[]) {
     }))
 
     setRocks(rockObjects)
-  }, [projects])
+  }, [projects, learningOutcomes])
 
   // Update hover state based on car position
   const updateHoverState = useCallback((car: CarState, setCar?: (value: React.SetStateAction<CarState>) => void) => {
@@ -64,7 +113,7 @@ export function useGameObjects(projects: Project[]) {
         car.y !== carRef.current.y) {
       carRef.current = car
       
-      const WELCOME_SIGN_X = -350 - 200;
+      const WELCOME_SIGN_X = -350;
       const WELCOME_SIGN_Y = GROUND_LEVEL - 350;
       const WELCOME_SIGN_WIDTH = 500;
       const WELCOME_SIGN_HEIGHT = 150;
@@ -78,8 +127,8 @@ export function useGameObjects(projects: Project[]) {
       
       // Check if car is standing on top of the welcome sign
       const isOnWelcomeSign = 
-        carHitbox.x + carHitbox.width > WELCOME_SIGN_X &&
-        carHitbox.x < WELCOME_SIGN_X + WELCOME_SIGN_WIDTH &&
+        carHitbox.x + carHitbox.width > WELCOME_SIGN_X - 200 &&
+        carHitbox.x < WELCOME_SIGN_X - 200 + WELCOME_SIGN_WIDTH &&
         carHitbox.y + carHitbox.height >= WELCOME_SIGN_Y - 5 &&
         carHitbox.y + carHitbox.height <= WELCOME_SIGN_Y + 5 &&
         car.velocityY >= 0;
@@ -134,5 +183,5 @@ export function useGameObjects(projects: Project[]) {
     }
   }, [])
 
-  return { gameObjects, rocks, setGameObjects, updateHoverState }
+  return { gameObjects, rocks, setGameObjects, updateHoverState, boundaries }
 } 

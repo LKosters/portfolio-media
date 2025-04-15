@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useKeyboardControls } from "@/hooks/use-keyboard-controls"
 import { 
   CarState, 
@@ -17,7 +17,7 @@ import {
   GROUND_LEVEL, 
   CAR_HEIGHT, 
   CAR_WIDTH, 
-  LEFT_BOUNDARY, 
+  LEFT_BOUNDARY,
   RIGHT_BOUNDARY,
   DASH_FORCE,
   DASH_COOLDOWN,
@@ -27,50 +27,47 @@ import {
   MAX_COMBO_MULTIPLIER,
   FLIP_SPEED,
   TRICK_SCORES,
-  SCORE_POPUP_LIFETIME
+  SCORE_POPUP_LIFETIME,
+  START_POSITION_X
 } from "./constants"
 
-const initialCarState: CarState = {
-  x: -200,
-  y: 100,
-  velocityX: 0,
-  velocityY: 5,
-  isJumping: false,
-  isCrouching: false,
-  isCrashed: false,
-  direction: 1,
-  wasInAir: true,
-  isFlipping: false,
-  flipAngle: 0,
-  isSpinning: false,
-  spinAngle: 0,
-  spinAxis: 'x',
-  isDashing: false,
-  dashCooldown: 0,
-  canDoubleJump: false,
-  keys: {},
-  selectedProjectId: null,
-  combo: 1,
-  comboTimeLeft: 0,
-  lastTrickTime: 0,
-  airTime: 0,
-  tricksPerformed: [],
-  score: 0,
-  highScore: 0,
-  scorePopups: []
-}
-
-export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
-  const [car, setCar] = useState<CarState>(() => {
-    // Load high score from local storage when component mounts
-    const savedHighScore = typeof window !== 'undefined' ? 
-      parseInt(localStorage.getItem('carGameHighScore') || '0', 10) : 0;
-    
-    return {
-      ...initialCarState,
-      highScore: savedHighScore
-    };
-  });
+export function useCarPhysics(
+  gameObjects: GameObject[], 
+  rocks: Rock[],
+  customBoundaries?: {
+    leftBoundary: number;
+    rightBoundary: number;
+  }
+) {
+  const [car, setCar] = useState<CarState>({
+    x: START_POSITION_X,
+    y: GROUND_LEVEL - CAR_HEIGHT,
+    velocityX: 0,
+    velocityY: 0,
+    isJumping: false,
+    isCrouching: false,
+    isCrashed: false,
+    direction: 1,
+    wasInAir: false,
+    isFlipping: false,
+    flipAngle: 0,
+    isSpinning: false,
+    spinAngle: 0,
+    spinAxis: 'y',
+    isDashing: false,
+    dashCooldown: 0,
+    canDoubleJump: false,
+    keys: {},
+    selectedProjectId: null,
+    combo: 1,
+    comboTimeLeft: 0,
+    lastTrickTime: 0,
+    airTime: 0,
+    tricksPerformed: [],
+    score: 0,
+    highScore: 0,
+    scorePopups: []
+  })
   const { keys } = useKeyboardControls()
 
   useEffect(() => {
@@ -375,13 +372,16 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
         newX += newVelocityX
         newY += newVelocityY
 
-        // Check screen boundaries
-        if (newX < LEFT_BOUNDARY) {
-          newX = LEFT_BOUNDARY
-          newVelocityX = 0
-        } else if (newX > RIGHT_BOUNDARY - CAR_WIDTH) {
-          newX = RIGHT_BOUNDARY - CAR_WIDTH
-          newVelocityX = 0
+        // Check screen boundaries - use dynamic boundaries if provided
+        const currentLeftBoundary = customBoundaries?.leftBoundary || LEFT_BOUNDARY;
+        const currentRightBoundary = customBoundaries?.rightBoundary || RIGHT_BOUNDARY;
+        
+        if (newX < currentLeftBoundary) {
+          newX = currentLeftBoundary;
+          newVelocityX = 0;
+        } else if (newX > currentRightBoundary - CAR_WIDTH) {
+          newX = currentRightBoundary - CAR_WIDTH;
+          newVelocityX = 0;
         }
 
         // Add top boundary to prevent car from going above the screen
@@ -496,15 +496,15 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
         // Hover handling is done in a separate effect and state update
 
         // Check for welcome sign collision
-        const WELCOME_SIGN_X = -350 - 200;
+        const WELCOME_SIGN_X = -350;
         const WELCOME_SIGN_Y = GROUND_LEVEL - 350;
         const WELCOME_SIGN_WIDTH = 500;
         const WELCOME_SIGN_HEIGHT = 150;
         
         // Check if car is on top of the welcome sign
         const isOnWelcomeSign = 
-          carHitbox.x + carHitbox.width > WELCOME_SIGN_X &&
-          carHitbox.x < WELCOME_SIGN_X + WELCOME_SIGN_WIDTH &&
+          carHitbox.x + carHitbox.width > WELCOME_SIGN_X - 200 &&
+          carHitbox.x < WELCOME_SIGN_X - 200 + WELCOME_SIGN_WIDTH &&
           carHitbox.y + carHitbox.height >= WELCOME_SIGN_Y - 5 &&
           carHitbox.y + carHitbox.height <= WELCOME_SIGN_Y + 5 &&
           newVelocityY >= 0;
@@ -573,7 +573,7 @@ export function useCarPhysics(gameObjects: GameObject[], rocks: Rock[]) {
     const intervalId = setInterval(updatePhysics, 1000 / 60) // 60 FPS
 
     return () => clearInterval(intervalId)
-  }, [keys])
+  }, [keys, customBoundaries])
 
   return { car, setCar }
 } 

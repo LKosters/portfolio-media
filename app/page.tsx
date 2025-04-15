@@ -40,6 +40,34 @@ export default function Home() {
     },
   ]
 
+  // Learning outcomes data
+  const learningOutcomes = [
+    {
+      id: "interactive-media",
+      title: "Interactive Media",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#FF9F1C",
+    },
+    {
+      id: "development",
+      title: "Development",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#2EC4B6",
+    },
+    {
+      id: "design",
+      title: "Design",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#E71D36",
+    },
+    {
+      id: "professional-standard",
+      title: "Professional",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#7209B7",
+    },
+  ]
+
   useEffect(() => {
     // Check if all images are loaded
     const checkImagesLoaded = async () => {
@@ -85,7 +113,11 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-black">
-      <GameCanvas onProjectSelect={handleProjectSelect} projects={projects} />
+      <GameCanvas 
+        onProjectSelect={handleProjectSelect} 
+        projects={projects} 
+        learningOutcomes={learningOutcomes}
+      />
       <div className="absolute bottom-4 left-4 text-white text-sm bg-black/50 p-2 rounded">
         <p>Use arrow keys or WASD to move, W to jump</p>
         <p>Crouch (down arrow or S) on a project button to view its content</p>
