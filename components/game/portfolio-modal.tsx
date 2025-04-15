@@ -44,6 +44,23 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
             const url = urlMatch ? urlMatch[1] : ''
             return <img key={index} src={url} alt={alt} className="max-w-full my-4 rounded" />
           } else {
+            // Process bold text (**text** or __text__) within paragraph
+            const parts = line.split(/(\*\*.*?\*\*|__.*?__)/g)
+            if (parts.length > 1) {
+              return (
+                <p key={index} className="mb-3">
+                  {parts.map((part, i) => {
+                    if (part.startsWith('**') && part.endsWith('**')) {
+                      return <strong key={i}>{part.slice(2, -2)}</strong>
+                    } else if (part.startsWith('__') && part.endsWith('__')) {
+                      return <strong key={i}>{part.slice(2, -2)}</strong>
+                    } else {
+                      return part
+                    }
+                  })}
+                </p>
+              )
+            }
             return <p key={index} className="mb-3">{line}</p>
           }
         })}

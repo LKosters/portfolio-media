@@ -20,6 +20,7 @@ export function usePortfolioContent() {
         const loadPortfolioContent = async (id: string) => {
           setIsLoadingContent(true)
           try {
+            console.log("Loading portfolio content for:", id)
             const response = await fetch(`/api/portfolio/${id}`)
             if (!response.ok) throw new Error("Failed to load content")
             const data = await response.json()
