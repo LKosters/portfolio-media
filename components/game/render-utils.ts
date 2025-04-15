@@ -42,7 +42,7 @@ export function drawBackground(
 
   // Draw grass
   ctx.fillStyle = "#4CAF50"
-  ctx.fillRect(0, GROUND_LEVEL - 20 - cameraY, canvas.width, 70)
+  ctx.fillRect(0, GROUND_LEVEL - 15 - cameraY, canvas.width, 70)
 
   // Draw ground
   ctx.fillStyle = "#8B4513"
