@@ -72,7 +72,6 @@ export interface CameraState {
   y: number
   targetY: number
   isMoving: boolean
-  viewingProject: string | null
   contentScrollY: number
   animationProgress: number
   animationDuration: number

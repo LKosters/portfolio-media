@@ -8,7 +8,6 @@ const initialCameraState: CameraState = {
   y: 0,
   targetY: 0,
   isMoving: false,
-  viewingProject: null,
   contentScrollY: 0,
   animationProgress: 0,
   animationDuration: 60,
@@ -28,48 +27,11 @@ export function useCamera() {
   // Handle mouse wheel for scrolling content
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (cameraRef.current.viewingProject !== null) {
-        e.preventDefault()
-        setCamera(prev => ({
-          ...prev,
-          contentScrollY: Math.max(0, prev.contentScrollY + e.deltaY)
-        }))
-      }
+      // No longer needed for portfolio view
     }
     
     window.addEventListener('wheel', handleWheel, { passive: false })
     return () => window.removeEventListener('wheel', handleWheel)
-  }, [])
-
-  // Handle mouse click for closing portfolio content
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (cameraRef.current.viewingProject !== null) {
-        const canvas = document.querySelector('canvas')
-        if (!canvas) return
-        
-        const rect = canvas.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
-        
-        // Check if close button was clicked
-        if (x > canvas.width - 100 && x < canvas.width - 70 && y > 60 && y < 90) {
-          // Reset camera position with animation
-          setCamera(prev => ({
-            ...prev,
-            targetY: 0,
-            isMoving: true,
-            viewingProject: null,
-            contentScrollY: 0,
-            animationProgress: 0,
-            startY: prev.y
-          }))
-        }
-      }
-    }
-    
-    window.addEventListener('click', handleClick)
-    return () => window.removeEventListener('click', handleClick)
   }, [])
 
   // Function to update camera position with animation - memoize to avoid creating new function references
@@ -105,36 +67,10 @@ export function useCamera() {
     }
   }, [])
 
-  const viewProject = useCallback((projectId: string | null) => {
-    if (projectId === null) {
-      setCamera(prev => ({
-        ...prev,
-        targetY: 0,
-        isMoving: true,
-        viewingProject: null,
-        contentScrollY: 0,
-        animationProgress: 0,
-        startY: prev.y
-      }))
-    } else {
-      if (cameraRef.current.viewingProject !== projectId) {
-        setCamera(prev => ({
-          ...prev,
-          targetY: -1000,
-          isMoving: true,
-          viewingProject: projectId,
-          animationProgress: 0,
-          startY: prev.y
-        }))
-      }
-    }
-  }, [])
-
   return { 
     camera, 
     cameraRef, 
     setCamera, 
-    updateCameraAnimation,
-    viewProject
+    updateCameraAnimation
   }
 } 

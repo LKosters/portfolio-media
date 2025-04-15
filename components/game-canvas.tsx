@@ -18,21 +18,29 @@ import {
   drawComboMeter,
   drawHighScore,
   getCameraX,
-  drawPortfolioView
 } from "./game"
 import { HighScoreModal } from "./game/high-score-modal"
+import { PortfolioModal } from "./game/portfolio-modal"
 
 export default function GameCanvas({ onProjectSelect, projects, learningOutcomes }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { camera, cameraRef, updateCameraAnimation, viewProject } = useCamera()
+  const { camera, cameraRef, updateCameraAnimation } = useCamera()
   const { gameObjects, rocks, updateHoverState, boundaries } = useGameObjects(projects, learningOutcomes)
   const { car, setCar } = useCarPhysics(gameObjects, rocks, {
     leftBoundary: boundaries.leftBoundary,
     rightBoundary: boundaries.rightBoundary
   })
   const { images, debugInfo } = useGameImages()
-  const { portfolioContent, isLoadingContent } = usePortfolioContent(camera)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { 
+    portfolioContent, 
+    isLoadingContent, 
+    isModalOpen, 
+    activeProjectId, 
+    activeProjectTitle,
+    viewProject, 
+    closeProject 
+  } = usePortfolioContent()
+  const [isHighScoreModalOpen, setIsHighScoreModalOpen] = useState(false)
 
   // Add event listener for canvas clicks to detect info icon clicks
   useEffect(() => {
@@ -70,7 +78,7 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
 
   // Handle opening the high score modal
   const handleInfoClick = useCallback(() => {
-    setIsModalOpen(true)
+    setIsHighScoreModalOpen(true)
   }, [])
 
   // Handle window resize
@@ -99,12 +107,24 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     )
   }, [boundaries.cameraLeftBoundary, boundaries.cameraRightBoundary])
 
+  // Helper to get project title from ID
+  const getProjectTitle = useCallback((projectId: string | null) => {
+    if (!projectId) return "";
+    
+    // Find the project in either projects or learningOutcomes array
+    const project = [...projects, ...learningOutcomes].find(p => p.id === projectId);
+    return project ? project.title : "";
+  }, [projects, learningOutcomes]);
+
   // Check for project selection
   useEffect(() => {
     // Check for crouching on portfolio items
-    if (car.isCrouching && car.selectedProjectId !== null && !cameraRef.current.viewingProject) {
-      // Move camera to sky position with animation
-      viewProject(car.selectedProjectId)
+    if (car.isCrouching && car.selectedProjectId !== null) {
+      // Get the project title
+      const title = getProjectTitle(car.selectedProjectId);
+      
+      // Open the portfolio modal
+      viewProject(car.selectedProjectId, title);
       
       // Reset car state
       setCar(prev => ({
@@ -112,7 +132,7 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
         isCrouching: false
       }))
     }
-  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject])
+  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject, getProjectTitle])
 
   // Notify parent component about project selection
   useEffect(() => {
@@ -162,9 +182,6 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
       drawComboMeter(ctx, car)
       drawHighScore(ctx, canvas, car.highScore, handleInfoClick)
 
-      // Draw portfolio content if viewing a project
-      drawPortfolioView(ctx, canvas, camera, portfolioContent, isLoadingContent)
-
       // Draw debug info
       if (debugInfo) {
         ctx.fillStyle = "white"
@@ -186,8 +203,6 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     cameraRef, 
     camera, 
     images, 
-    portfolioContent, 
-    isLoadingContent,
     car,
     gameObjects,
     rocks,
@@ -200,9 +215,17 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     <>
       <canvas ref={canvasRef} className="w-full h-full" />
       <HighScoreModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isHighScoreModalOpen} 
+        onClose={() => setIsHighScoreModalOpen(false)}
         currentScore={car.highScore}
+      />
+      <PortfolioModal
+        isOpen={isModalOpen}
+        onClose={closeProject}
+        projectId={activeProjectId}
+        projectTitle={activeProjectTitle}
+        content={portfolioContent}
+        isLoading={isLoadingContent}
       />
     </>
   )

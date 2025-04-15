@@ -1,21 +1,22 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { CameraState } from "./types"
 
-export function usePortfolioContent(camera: CameraState) {
+export function usePortfolioContent() {
   const [portfolioContent, setPortfolioContent] = useState<string>("")
   const [isLoadingContent, setIsLoadingContent] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null)
+  const [activeProjectTitle, setActiveProjectTitle] = useState<string>("")
   const prevProjectRef = useRef<string | null>(null)
 
   // Load portfolio content
   useEffect(() => {
-    const projectId = camera.viewingProject
     // Only load content if the project ID has changed
-    if (projectId !== prevProjectRef.current) {
-      prevProjectRef.current = projectId
+    if (activeProjectId !== prevProjectRef.current) {
+      prevProjectRef.current = activeProjectId
       
-      if (projectId) {
+      if (activeProjectId) {
         const loadPortfolioContent = async (id: string) => {
           setIsLoadingContent(true)
           try {
@@ -31,13 +32,37 @@ export function usePortfolioContent(camera: CameraState) {
           }
         }
         
-        loadPortfolioContent(projectId)
+        loadPortfolioContent(activeProjectId)
       } else {
         // Reset content when project is closed
         setPortfolioContent("")
       }
     }
-  }, [camera.viewingProject])
+  }, [activeProjectId])
 
-  return { portfolioContent, isLoadingContent }
+  const viewProject = (projectId: string | null, projectTitle: string = "") => {
+    if (projectId) {
+      setActiveProjectId(projectId)
+      setActiveProjectTitle(projectTitle)
+      setIsModalOpen(true)
+    } else {
+      setIsModalOpen(false)
+    }
+  }
+
+  const closeProject = () => {
+    setIsModalOpen(false)
+    // Don't clear activeProjectId immediately to prevent content flashing
+    // It will be cleared when a new project is selected
+  }
+
+  return { 
+    portfolioContent, 
+    isLoadingContent, 
+    isModalOpen, 
+    activeProjectId,
+    activeProjectTitle,
+    viewProject, 
+    closeProject 
+  }
 } 
