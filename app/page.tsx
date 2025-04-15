@@ -15,12 +15,6 @@ export default function Home() {
       color: "#4ECDC4",
     },
     {
-      id: "devsnip",
-      title: "Project DevSnip",
-      image: "/placeholder.svg?height=300&width=400",
-      color: "#6ECBF5",
-    },
-    {
       id: "project-ux",
       title: "Project UX",
       image: "/placeholder.svg?height=300&width=400",
@@ -37,7 +31,13 @@ export default function Home() {
       title: "Project X",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFB400",
-    }
+    },
+    {
+      id: "devsnip",
+      title: "Project DevSnip",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#6ECBF5",
+    },
   ]
 
   useEffect(() => {
