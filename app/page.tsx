@@ -15,6 +15,7 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#4ECDC4",
     },
+    /*
     {
       id: "project-ux",
       title: "Project UX",
@@ -33,6 +34,7 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFB400",
     },
+    */
     {
       id: "project-devsnip",
       title: "Project DevSnip",
@@ -43,6 +45,7 @@ export default function Home() {
 
   // Learning outcomes data
   const learningOutcomes = [
+    /*
     {
       id: "interactive-media",
       title: "Interactive Media",
@@ -61,6 +64,7 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#E71D36",
     },
+    */
     {
       id: "professional-standard",
       title: "Professional",

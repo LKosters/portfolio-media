@@ -90,9 +90,9 @@ export function useGameObjects(projects: Project[], learningOutcomes: Project[] 
     // Combine both types of objects
     setGameObjects([...portfolioObjects, ...learningObjects])
 
-    // Initialize rocks
+    // Initialize rocks WELCOME_SIGN_X + 1900
     const rockPositions = [
-      WELCOME_SIGN_X + 1900
+      
     ]
 
     const rockObjects = rockPositions.map((x, index) => ({
