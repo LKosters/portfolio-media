@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const projectId = params.id
-    const filePath = path.join(process.cwd(), "content/portfolio", `project-${projectId}.md`)
+    const filePath = path.join(process.cwd(), "content/portfolio", `${projectId}.md`)
     
     if (!fs.existsSync(filePath)) {
       return NextResponse.json(

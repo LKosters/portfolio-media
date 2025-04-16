@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback, useState } from "react"
+import { useEffect, useRef, useCallback, useState, KeyboardEvent } from "react"
 import { 
   GameCanvasProps,
   useCamera,
@@ -210,6 +210,25 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     handleInfoClick,
     getDynamicCameraX
   ])
+
+  // Handle ESC key to close modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isHighScoreModalOpen) {
+          setIsHighScoreModalOpen(false)
+        }
+        if (isModalOpen) {
+          closeProject()
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown as any)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown as any)
+    }
+  }, [isHighScoreModalOpen, isModalOpen, closeProject])
 
   return (
     <>

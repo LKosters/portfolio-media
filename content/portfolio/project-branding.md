@@ -34,3 +34,5 @@ Voor de oplevering heb ik gewerkt aan de presentatie en heb ik ook een deel gepr
 
 ![](/portfolio-images/Pasted image 20250317101251.png)
 ![](/portfolio-images/Pasted image 20250317101216.png)
+
+## TODO: Conclusie
