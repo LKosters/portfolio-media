@@ -131,8 +131,8 @@ export default function Home() {
 
 
       <div className="absolute bottom-4 left-4 text-white text-sm bg-black/50 p-2 rounded">
-        <p>Use arrow keys or WASD to move, W to jump</p>
-        <p>Crouch (down arrow or S) on a project button to view its content</p>
+        <p>Use SPACE to do tricks and SHIFT to dash.</p>
+        <p>Try to get the highest score as possible and submit your name to the leaderboard!</p>
       </div>
     </main>
   )
