@@ -15,13 +15,13 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#4ECDC4",
     },
-    /*
     {
       id: "project-ux",
       title: "Project UX",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFD166",
     },
+        /*
     {
       id: "project-development",
       title: "Project Development",

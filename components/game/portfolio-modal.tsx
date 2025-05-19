@@ -18,7 +18,7 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
   // Parse markdown content for rendering
   const renderContent = () => {
     if (isLoading) {
-      return <p className="text-left text-white">Loading...</p>
+      return <p className="text-left text-black">Loading...</p>
     }
 
     const lines = content.split('\n')
@@ -26,11 +26,11 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
       <div className="markdown-content">
         {lines.map((line, index) => {
           if (line.startsWith('# ')) {
-            return <h1 key={index} className="text-2xl font-bold mb-4" style={{ color: '#111', textAlign: 'left' }}>{line.substring(2)}</h1>
+            return <h1 key={index} className="text-2xl font-bold mb-4" style={{ color: '#000', textAlign: 'left' }}>{line.substring(2)}</h1>
           } else if (line.startsWith('## ')) {
-            return <h2 key={index} className="text-xl font-bold mb-3" style={{ color: '#111', textAlign: 'left' }}>{line.substring(3)}</h2>
+            return <h2 key={index} className="text-xl font-bold mb-3" style={{ color: '#000', textAlign: 'left' }}>{line.substring(3)}</h2>
           } else if (line.startsWith('### ')) {
-            return <h3 key={index} className="text-lg font-semibold mb-2" style={{ color: '#111', textAlign: 'left' }}>{line.substring(4)}</h3>
+            return <h3 key={index} className="text-lg font-semibold mb-2" style={{ color: '#000', textAlign: 'left' }}>{line.substring(4)}</h3>
           } else if (line.startsWith('> ')) {
             return <blockquote key={index} className="border-l-4 border-black pl-4 italic my-3 text-black" style={{ textAlign: 'left' }}>{line.substring(2)}</blockquote>
           } else if (line.startsWith('- ')) {
@@ -108,7 +108,7 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
           className="flex-grow overflow-auto w-full flex flex-col"
           style={{ background: 'none', padding: '0 2rem 1.5rem 2rem', width: '100%', maxHeight: 'calc(100vh - 180px)' }}
         >
-          <div style={{ width: '100%', textAlign: 'left', color: '#222', fontSize: '1.25rem', fontFamily: 'inherit', fontWeight: 400 }}>
+          <div style={{ width: '100%', textAlign: 'left', color: '#000', fontSize: '1.25rem', fontFamily: 'inherit', fontWeight: 400 }}>
             {renderContent()}
           </div>
         </div>
