@@ -21,13 +21,13 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFD166",
     },
-        /*
     {
       id: "project-development",
       title: "Project Development",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FF6B6B",
     },
+    /*
     {
       id: "project-x",
       title: "Project X",
@@ -52,12 +52,14 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#FF9F1C",
     },
+    */
     {
       id: "development",
       title: "Development",
       image: "/placeholder.svg?height=300&width=400",
       color: "#2EC4B6",
     },
+    /*
     {
       id: "design",
       title: "Design",
