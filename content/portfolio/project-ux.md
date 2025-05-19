@@ -1,5 +1,3 @@
-## Coming soon!
-
 Voor dit project bij Cardan heb ik meegewerkt aan een digitale omgeving waarmee je kunt ervaren hoe belangrijk digitale toegankelijkheid is. Ik heb het vijfde station ontwikkeld, waarin bezoekers zelf merken hoe lastig lezen is met dyslexie en slecht kleurcontrast. Zo wordt duidelijk waarom goede leesbaarheid en voldoende kleurcontrast op websites belangrijk zijn voor iedereen.
 
 ## Onderzoek
