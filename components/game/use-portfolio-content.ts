@@ -8,6 +8,7 @@ export function usePortfolioContent() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null)
   const [activeProjectTitle, setActiveProjectTitle] = useState<string>("")
+  const [activeProjectColor, setActiveProjectColor] = useState<string | undefined>(undefined)
   const prevProjectRef = useRef<string | null>(null)
 
   // Load portfolio content
@@ -41,10 +42,11 @@ export function usePortfolioContent() {
     }
   }, [activeProjectId])
 
-  const viewProject = (projectId: string | null, projectTitle: string = "") => {
+  const viewProject = (projectId: string | null, projectTitle: string = "", projectColor?: string) => {
     if (projectId) {
       setActiveProjectId(projectId)
       setActiveProjectTitle(projectTitle)
+      setActiveProjectColor(projectColor)
       setIsModalOpen(true)
     } else {
       setIsModalOpen(false)
@@ -63,6 +65,7 @@ export function usePortfolioContent() {
     isModalOpen, 
     activeProjectId,
     activeProjectTitle,
+    activeProjectColor,
     viewProject, 
     closeProject 
   }

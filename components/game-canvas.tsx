@@ -116,23 +116,29 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     return project ? project.title : "";
   }, [projects, learningOutcomes]);
 
+  // Helper to get project color from ID
+  const getProjectColor = useCallback((projectId: string | null) => {
+    if (!projectId) return undefined;
+    const project = [...projects, ...learningOutcomes].find(p => p.id === projectId);
+    return project ? project.color : undefined;
+  }, [projects, learningOutcomes]);
+
   // Check for project selection
   useEffect(() => {
     // Check for crouching on portfolio items
     if (car.isCrouching && car.selectedProjectId !== null) {
       // Get the project title
       const title = getProjectTitle(car.selectedProjectId);
-      
+      const color = getProjectColor(car.selectedProjectId);
       // Open the portfolio modal
-      viewProject(car.selectedProjectId, title);
-      
+      viewProject(car.selectedProjectId, title, color);
       // Reset car state
       setCar(prev => ({
         ...prev,
         isCrouching: false
       }))
     }
-  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject, getProjectTitle])
+  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject, getProjectTitle, getProjectColor])
 
   // Notify parent component about project selection
   useEffect(() => {
@@ -245,6 +251,7 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
         projectTitle={activeProjectTitle}
         content={portfolioContent}
         isLoading={isLoadingContent}
+        backgroundColor={getProjectColor(activeProjectId)}
       />
     </>
   )
