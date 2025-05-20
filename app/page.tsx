@@ -14,18 +14,21 @@ export default function Home() {
       title: "Project Branding",
       image: "/placeholder.svg?height=300&width=400",
       color: "#4ECDC4",
+      tags: ["Design", "Interactive Media"]
     },
     {
       id: "project-ux",
       title: "Project UX",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFD166",
+      tags: ["Design", "Interactive Media"]
     },
     {
       id: "project-development",
       title: "Project Development",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FF6B6B",
+      tags: ["Development", "Design", "Professional standard"]
     },
     /*
     {
@@ -40,6 +43,7 @@ export default function Home() {
       title: "Project DevSnip",
       image: "/placeholder.svg?height=300&width=400",
       color: "#6ECBF5",
+      tags: ["Development", "Design", "Professional standard"]
     },
   ]
 

@@ -37,6 +37,8 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     isModalOpen, 
     activeProjectId, 
     activeProjectTitle,
+    activeProjectColor,
+    activeProjectTags,
     viewProject, 
     closeProject 
   } = usePortfolioContent()
@@ -123,6 +125,13 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
     return project ? project.color : undefined;
   }, [projects, learningOutcomes]);
 
+  // Helper to get project tags from ID
+  const getProjectTags = useCallback((projectId: string | null) => {
+    if (!projectId) return [];
+    const project = [...projects, ...learningOutcomes].find(p => p.id === projectId);
+    return project?.tags || [];
+  }, [projects, learningOutcomes]);
+
   // Check for project selection
   useEffect(() => {
     // Check for crouching on portfolio items
@@ -130,15 +139,16 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
       // Get the project title
       const title = getProjectTitle(car.selectedProjectId);
       const color = getProjectColor(car.selectedProjectId);
+      const tags = getProjectTags(car.selectedProjectId);
       // Open the portfolio modal
-      viewProject(car.selectedProjectId, title, color);
+      viewProject(car.selectedProjectId, title, color, tags);
       // Reset car state
       setCar(prev => ({
         ...prev,
         isCrouching: false
       }))
     }
-  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject, getProjectTitle, getProjectColor])
+  }, [car.isCrouching, car.selectedProjectId, setCar, viewProject, getProjectTitle, getProjectColor, getProjectTags])
 
   // Notify parent component about project selection
   useEffect(() => {
@@ -252,6 +262,7 @@ export default function GameCanvas({ onProjectSelect, projects, learningOutcomes
         content={portfolioContent}
         isLoading={isLoadingContent}
         backgroundColor={getProjectColor(activeProjectId)}
+        tags={activeProjectTags}
       />
     </>
   )

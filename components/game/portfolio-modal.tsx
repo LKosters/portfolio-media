@@ -10,9 +10,10 @@ interface PortfolioModalProps {
   content: string
   isLoading: boolean
   backgroundColor?: string
+  tags?: string[]
 }
 
-export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, content, isLoading, backgroundColor }: PortfolioModalProps) {
+export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, content, isLoading, backgroundColor, tags }: PortfolioModalProps) {
   if (!isOpen || !projectId) return null
 
   // Parse markdown content for rendering
@@ -89,20 +90,41 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
         }}
       >
         <div className="w-full flex justify-center items-center" style={{ padding: '2.5rem 2rem 1.5rem 2rem' }}>
-          <h2
-            className="text-center w-full"
-            style={{
-              fontFamily: 'inherit',
-              fontWeight: 700,
-              fontSize: '2rem',
-              color: '#111',
-              letterSpacing: 1,
-              margin: 0,
-              textShadow: '2px 2px 0 #fff, 4px 4px 0 #111',
-            }}
-          >
-            {projectTitle}
-          </h2>
+          <div className="flex flex-col items-center w-full">
+            <h2
+              className="text-center w-full"
+              style={{
+                fontFamily: 'inherit',
+                fontWeight: 700,
+                fontSize: '2rem',
+                color: '#111',
+                letterSpacing: 1,
+                margin: 0,
+                textShadow: '2px 2px 0 #fff, 4px 4px 0 #111',
+              }}
+            >
+              {projectTitle}
+            </h2>
+            {tags && tags.length > 0 && (
+              <div className="flex gap-2 mt-3">
+                {tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      background: '#111',
+                      color: '#fff',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      fontFamily: 'inherit'
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div
           className="flex-grow overflow-auto w-full flex flex-col"
