@@ -16,8 +16,8 @@ Planning is bijgehouden met issues in GitHub met een scrum bord en is ook per is
 ## Development
 Het development process ging best wel snel en goed zonder enige obstakels aangezien het best wel een simpel project is en ik al wat meer development ervaring heb, dus na één week stond er al een hele goede versie die af was.
 
-## Testen
-TODO
+## TODO: Testen
+Tekst
 
-## Conclusie
+## TODO: Conclusie
 Tekst

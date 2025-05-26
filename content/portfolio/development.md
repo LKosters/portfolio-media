@@ -6,7 +6,7 @@ Om mijn development leerdoelen halen heb ik in drie projecten gewerkt aan dit le
 ## Project Development
 In dit project heb ik meegewerkt aan een website voor Cardan om een ervaringsplein te maken voor visuele beperkingen. Je kan of een eigen site importeren of een van de sites kiezen die er al staan. Als je dan op die site zit kun je verschillende beperkingen aanklikken, denk hierbij aan bijvoorbeeld kleurenblindheid of kokervisie. Dit project is gemaakt in het Javascript framework Nuxt en voor de CSS is TailwindCSS gebruikt.
 
-## Project X
+## TODO: Project X
 Tekst
 
 ## Project DevSnip

@@ -1,5 +1,6 @@
 Dit project is een zelf bedacht project die ik graag wou doen. Het doel: een website waar developers makkelijk en snel code snippets kunnen delen met elkaar. Zie hieronder mijn process voor het maken van deze website.
 ![](/portfolio-images/Process.png)
+
 ## Project management
 Om dit bij te houden heb ik als project management tool Linear gebruikt zodat ik een goed overzicht heb wat ik nog moet doen. Ook kan ik hierin de code die ik schrijf linken aan een git branch en een preview link bij mijn hosting zodat ik precies kan zien welke code er nodig was om een bepaald issue te verhelpen.
 
@@ -15,6 +16,7 @@ Op het begin van zon project denk ik na met welke tech stack ik de website wil b
 - Framework: Next.js (voor de Shadcn component library)
 - Database: Firebase (heeft een fijne free tier en is makkelijk te gebruiken)
 - Authenticatie: Clerk (makkelijk op te zetten ook met SSO en een goede free tier)
+
 ### Basis opzetten
 Ik begon het development gedeelte met een basis opzetten in de AI tool v0.dev, dit zorgt ervoor dat ik veel sneller een dashboard op kan zetten en aan landingspagina op basis van mijn design. Een prompt die ik bijvoorbeeld gebruikt heb voor het maken van het dashboard is:
 
