@@ -10,3 +10,6 @@ Tijdens het project zijn prototypes ontwikkeld van de digitale omgeving. Hierin 
 
 ![Prototype](/portfolio-images/Pasted%20image%2020250519101251.png)
 Het vijfde station biedt een interactieve ervaring die inzicht geeft in de beperkingen van mensen met dyslexie. Tegelijkertijd worden er concrete oplossingen getoond in de FAQ elementen ernaast, zoals het gebruik van goed kleurcontrast en duidelijke lettertypes. Hierdoor groeit de kennis over digitale toegankelijkheid en inclusief ontwerp bij de deelnemers.
+
+## Conclusie
+Dit project was voor mij best wel simpel project en ik vond dat er best veel tijd was voor het product wat we maakten. Maar ik heb wel zeker wat geleerd van het research doen, voor dit project heb ik nooit echt heel diep research gedaan in een onderwerp. Hierdoor weet ik beter hoe ik een onderzoeksplan opzet en waar ik op moet letten.

@@ -68,5 +68,5 @@ Zie hieronder een samenvatting van de antwoorden:
 
 ![](/portfolio-images/Pasted image 20250410102635.png)
 
-## TODO: Conclusie
-Bezoek de website op https://www.devsnip.nl/
+## Conclusie
+Dit project wou ik maken omdat ik graag iets met Firebase en Clerk wou doen en iets wou hebben wat goed op mijn portfolio zou staan, ik denk dat dit best wel goed gelukt is. Het grootste wat ik geleerd in dit project heb is het stukje user testing, voor dit project heb ik dat nooit echt toegepast en ik denk dat ik dat nu wel goed heb gedaan. Ook de manier van hoe ik user testing heb toegepast is denk ik super handig en gebruik ik hierna op al mijn websites.
