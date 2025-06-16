@@ -30,14 +30,12 @@ export default function Home() {
       color: "#FF6B6B",
       tags: ["Development", "Design", "Professional standard"]
     },
-    /*
     {
       id: "project-x",
       title: "Project X",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFB400",
     },
-    */
     {
       id: "project-devsnip",
       title: "Project DevSnip",
@@ -61,14 +59,12 @@ export default function Home() {
       image: "/placeholder.svg?height=300&width=400",
       color: "#2EC4B6",
     },
-    /*
     {
       id: "design",
       title: "Design",
       image: "/placeholder.svg?height=300&width=400",
       color: "#E71D36",
     },
-    */
     {
       id: "professional-standard",
       title: "Professional",
