@@ -35,6 +35,14 @@ export default function Home() {
       title: "Project X",
       image: "/placeholder.svg?height=300&width=400",
       color: "#FFB400",
+      tags: ["Development", "Interactive Media", "Professional standard"]
+    },
+    {
+      id: "portfolio-website",
+      title: "Portfolio Website",
+      image: "/placeholder.svg?height=300&width=400",
+      color: "#8A4FFF",
+      tags: ["Development", "Interactive Media"]
     },
     {
       id: "project-devsnip",
