@@ -74,7 +74,7 @@ export function HighScoreModal({ isOpen, onClose, currentScore }: HighScoreModal
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="playerName" className="block text-white mb-2">
-                Enter your name:
+                Voer je naam in:
               </label>
               <input
                 type="text"
@@ -95,13 +95,13 @@ export function HighScoreModal({ isOpen, onClose, currentScore }: HighScoreModal
                 disabled={isSubmitting}
                 className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded focus:outline-none disabled:opacity-50"
               >
-                {isSubmitting ? "Submitting..." : "Submit Score"}
+                {isSubmitting ? "Versturen..." : "Verstuur Score"}
               </button>
             </div>
           </form>
         ) : (
           <p className="text-green-400 text-center mb-4">
-            Your score has been added to the leaderboard!
+            Je score is toegevoegd aan de leaderboard!
           </p>
         )}
 
@@ -113,7 +113,7 @@ export function HighScoreModal({ isOpen, onClose, currentScore }: HighScoreModal
                 <thead>
                   <tr>
                     <th className="py-1 text-left">#</th>
-                    <th className="py-1 text-left">Name</th>
+                    <th className="py-1 text-left">Naam</th>
                     <th className="py-1 text-right">Score</th>
                   </tr>
                 </thead>
@@ -129,7 +129,7 @@ export function HighScoreModal({ isOpen, onClose, currentScore }: HighScoreModal
               </table>
             </div>
           ) : (
-            <p className="text-gray-400 text-center">No scores yet. Be the first!</p>
+            <p className="text-gray-400 text-center">Nog geen scores. Wees de eerste!</p>
           )}
         </div>
 
@@ -138,7 +138,7 @@ export function HighScoreModal({ isOpen, onClose, currentScore }: HighScoreModal
             onClick={onClose}
             className="text-white hover:text-yellow-500 font-medium"
           >
-            Close
+            Sluiten
           </button>
         </div>
       </div>

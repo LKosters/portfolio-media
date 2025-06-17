@@ -137,8 +137,8 @@ export default function Home() {
 
 
       <div className="absolute bottom-4 left-4 text-white text-sm bg-black/50 p-2 rounded">
-        <p>Use SPACE to do tricks and SHIFT to dash.</p>
-        <p>Try to get the highest score as possible and submit your name to the leaderboard!</p>
+        <p>Gebruik SPACE om tricks te doen en SHIFT om een speed boost te krijgen.</p>
+        <p>Probeer de hoogste score te halen en zet je naam in de leaderboard!</p>
         <p>Gemaakt door Laurens Kosters, <a href="https://laurenskosters.nl/" target="_blank" className="text-blue-500">https://laurenskosters.nl/</a></p>
       </div>
     </main>
