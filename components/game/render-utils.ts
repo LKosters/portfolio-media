@@ -146,12 +146,12 @@ export function drawWelcomeSign(
     ctx.font = "bold 24px monospace"
     ctx.textAlign = "center"
     ctx.textBaseline = "middle"
-    ctx.fillText("WELCOME TO MY PORTFOLIO", welcomeX + 50, GROUND_LEVEL - 314 - cameraY)
+    ctx.fillText("Welkom op mijn portfolio", welcomeX + 50, GROUND_LEVEL - 314 - cameraY)
 
     // Draw instructions
     ctx.font = "16px monospace"
-    ctx.fillText("Use arrow keys or WASD to move, W to jump", welcomeX + 50, GROUND_LEVEL - 274 - cameraY)
-    ctx.fillText("Crouch on a project button to view its content", welcomeX + 50, GROUND_LEVEL - 244 - cameraY)
+    ctx.fillText("Gebruik de pijltjes of WASD toetsen om te bewegen", welcomeX + 50, GROUND_LEVEL - 274 - cameraY)
+    ctx.fillText("Gebruik S op een project om de content te bekijken", welcomeX + 50, GROUND_LEVEL - 244 - cameraY)
   }
 }
 
@@ -328,7 +328,7 @@ export function drawSpeedometer(
   ctx.font = "12px monospace"
   ctx.fillStyle = "#FFFFFF"
   ctx.textAlign = "center"
-  ctx.fillText("MPH", speedometerX, speedometerY + 20)
+  ctx.fillText("KM/H", speedometerX, speedometerY + 20)
 
   // Draw digital speed
   ctx.font = "16px monospace"
