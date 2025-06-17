@@ -27,6 +27,20 @@ Ik was nog niet helemaal blij met de styling die de background agent gemaakt had
 ## Conclusie
 Ik ben best wel blij met het eindresultaat, het is namelijk een app die ik zelf gebruik. Mijn doel was om AI in een nuttige manier te integeren in een app, en als ik het zelf al gebruik dan is dat zeker wel geslaagd.
 
+## Screenshots van app
+De homepagina:
+![Pasted image 20250617091412](/portfolio-images/Pasted%20image%2020250617091412.png)
+Routines overzicht:
+![Pasted image 20250617091451](/portfolio-images/Pasted%20image%2020250617091451.png)
+Routine aanmaken:
+![Pasted image 20250617091540](/portfolio-images/Pasted%20image%2020250617091540.png)
+Enkele routine:
+![Pasted image 20250617091640](/portfolio-images/Pasted%20image%2020250617091640.png)
+Statistieken:
+![Pasted image 20250617091601](/portfolio-images/Pasted%20image%2020250617091601.png)
+AI Coach:
+![Pasted image 20250617091618](/portfolio-images/Pasted%20image%2020250617091618.png)
+
 ## Links
 GitHub: https://github.com/LKosters/AdaptAI
 Figma: https://www.figma.com/design/4OxGwHhjDE6rYjUCiDhRdh/AdaptAI?node-id=0-1&t=KV6Bz8pbblLitCvR-1
