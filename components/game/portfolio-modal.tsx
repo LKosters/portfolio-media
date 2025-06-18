@@ -19,12 +19,12 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
   // Parse markdown content for rendering
   const renderContent = () => {
     if (isLoading) {
-      return <p className="text-left text-black">Loading...</p>
+      return <p className="text-left text-black">Aan het laden...</p>
     }
 
     const lines = content.split('\n')
     return (
-      <div className="markdown-content">
+      <div className="markdown-content overflow-x-hidden">
         {lines.map((line, index) => {
           if (line.startsWith('# ')) {
             return <h1 key={index} className="text-2xl font-bold mb-4" style={{ color: '#000', textAlign: 'left' }}>{line.substring(2)}</h1>
@@ -98,7 +98,7 @@ export function PortfolioModal({ isOpen, onClose, projectId, projectTitle, conte
                 elements.push(line.substring(lastIndex, match.index))
               }
               elements.push(
-                <a key={key++} href={match[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#000', textDecoration: 'underline' }}>
+                <a className="w-full" key={key++} href={match[2]} target="_blank" rel="noopener noreferrer" style={{ color: '#000', textDecoration: 'underline' }}>
                   {match[1]}
                 </a>
               )
